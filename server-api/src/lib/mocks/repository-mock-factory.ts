@@ -1,0 +1,31 @@
+// Define factory functions for mocking repository in the tests
+
+import { Repository } from "typeorm";
+
+type MockType<T> = {
+    [P in keyof T]?: jest.Mock<{}>;
+};
+
+export const repositoryMockFactory: () => MockType<Repository<any>> = jest.fn(() => ({
+
+    find: jest.fn(entity => entity),
+
+    findOne: jest.fn(entity => entity),
+
+    findOneBy: jest.fn(entity => entity),
+
+    save: jest.fn(entity => entity),
+
+    create: jest.fn(entity => entity),
+
+    update: jest.fn(entity => entity),
+
+    delete: jest.fn(entity => entity),
+
+    createQueryBuilder: jest.fn(() => ({
+        where: jest.fn().mockReturnThis(),
+        select: jest.fn().mockReturnThis(),
+        getRawOne: jest.fn().mockResolvedValue({})
+    })),
+
+}));
