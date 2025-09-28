@@ -17,7 +17,7 @@ import { JwtModule } from '@nestjs/jwt';
             imports: [ConfigModule],
             useFactory: (configService: ConfigService) => ({
                 type: 'sqlite',
-                database: "./src/database/" +  configService.get("DATABASE_NAME"),
+                database: "dist/database/" +  configService.get("DATABASE_NAME"),
                 synchronize: configService.get("DATABASE_SYNCHRONIZE"),
                 entities: ["dist/entities/*.entity.js"],        
                 migrationsRun: configService.get("DATABASE_MIGRATION_AUTO_RUN"),
