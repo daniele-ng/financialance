@@ -4,8 +4,9 @@ import ErrorMessageComponent from '@/components/form/ErrorMessageComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import { useForm } from '@/lib/form';
+import { loginSchema } from '@/lib/zod/schemas/login.schema';
 
-const { pending, errors, handlerOnSubmit } = useForm("Dashboard", true)
+const { pending, errors, handlerOnSubmit } = useForm("Dashboard", true, false, loginSchema)
 
 </script>
 
@@ -18,7 +19,7 @@ const { pending, errors, handlerOnSubmit } = useForm("Dashboard", true)
             <div class="w-full mb-10">
                 <InputComponent :id="'pin'" :name="'pin'" :type="'password'" :placeholder="'codice pin'"
                     :required="false" />
-                <ErrorMessageComponent :message="typeof errors?.pin !== 'undefined' ? errors.pin[0] : ''" />                
+                <ErrorMessageComponent :message="typeof errors?.pin !== 'undefined' ? errors.pin : ''" />                
                 <ErrorMessageComponent :message="errors?.server?.toString() ?? ''" />
             </div>
             <div class="w-full text-center mb-10">

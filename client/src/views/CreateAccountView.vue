@@ -4,9 +4,10 @@ import ErrorMessageComponent from '@/components/form/ErrorMessageComponent.vue';
 import InputComponent from '@/components/form/InputComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import { useForm } from '@/lib/form';
+import { accountSchema } from '@/lib/zod/schemas/account.schema';
 
 
-const { pending, errors, handlerOnSubmit } = useForm("Login")
+const { pending, errors, handlerOnSubmit } = useForm("Login", false, false, accountSchema)
 
 </script>
 
@@ -21,7 +22,7 @@ const { pending, errors, handlerOnSubmit } = useForm("Login")
                 <div class="w-full mb-6">
                     <InputComponent :id="'first_name'" :name="'first_name'" :type="'text'" :required="false" />
                     <ErrorMessageComponent
-                        :message="typeof errors?.first_name != 'undefined' ? errors.first_name[0] : ''" />
+                        :message="typeof errors?.first_name != 'undefined' ? errors.first_name : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'last_name'" :label="'Cognome'" />
@@ -29,14 +30,14 @@ const { pending, errors, handlerOnSubmit } = useForm("Login")
                 <div class="w-full mb-6">
                     <InputComponent :id="'last_name'" :name="'last_name'" :type="'text'" :required="false" />
                     <ErrorMessageComponent
-                        :message="typeof errors?.last_name != 'undefined' ? errors.last_name[0] : ''" />
+                        :message="typeof errors?.last_name != 'undefined' ? errors.last_name : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'email'" :label="'Indirizzo e-mail'" />
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'email'" :name="'email'" :type="'text'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.email != 'undefined' ? errors.email[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.email != 'undefined' ? errors.email : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'vat'" :label="'Partita IVA'" />
@@ -44,14 +45,14 @@ const { pending, errors, handlerOnSubmit } = useForm("Login")
                 <div class="w-full mb-6">
                     <InputComponent :id="'vat'" :name="'vat_number'" :type="'text'" :required="false" />
                     <ErrorMessageComponent
-                        :message="typeof errors?.vat_number != 'undefined' ? errors.vat_number[0] : ''" />
+                        :message="typeof errors?.vat_number != 'undefined' ? errors.vat_number : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'pin'" :label="'Codice PIN'" />
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'pin'" :name="'pin'" :type="'password'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.pin != 'undefined' ? errors.pin[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.pin != 'undefined' ? errors.pin : ''" />
                 </div>
                 <div class="w-full mb-10">
                     <ErrorMessageComponent :message="errors?.server?.toString() ?? ''" />

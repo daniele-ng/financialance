@@ -20,21 +20,21 @@ const { pending, errors, handlerOnSubmit } = useForm("Settings", false, true)
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'revenue'" :name="'revenue'" :type="'text'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.revenue != 'undefined' ? errors.revenue[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.revenue != 'undefined' ? errors.revenue : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'tax'" :label="'Imposta sostitutiva'" />
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'tax'" :name="'tax'" :type="'text'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.tax != 'undefined' ? errors.tax[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.tax != 'undefined' ? errors.tax : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'inps'" :label="'Contributi previdenziali'" />
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'inps'" :name="'inps'" :type="'text'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.inps != 'undefined' ? errors.inps[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.inps != 'undefined' ? errors.inps : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'advanceTaxPayment'" :label="'Anticipo tasse anno successivo'" />
@@ -43,14 +43,14 @@ const { pending, errors, handlerOnSubmit } = useForm("Settings", false, true)
                     <InputComponent :id="'advanceTaxPayment'" :name="'advanceTaxPayment'" :type="'text'"
                         :required="false" />
                     <ErrorMessageComponent
-                        :message="typeof errors?.advanceTaxPayment != 'undefined' ? errors.advanceTaxPayment[0] : ''" />
+                        :message="typeof errors?.advanceTaxPayment != 'undefined' ? errors.advanceTaxPayment : ''" />
                 </div>
                 <div class="my-4">
                     <LabelComponent :for="'year'" :label="'Anno'" />
                 </div>
                 <div class="w-full mb-6">
                     <InputComponent :id="'year'" :name="'year'" :type="'text'" :required="false" />
-                    <ErrorMessageComponent :message="typeof errors?.year != 'undefined' ? errors.year[0] : ''" />
+                    <ErrorMessageComponent :message="typeof errors?.year != 'undefined' ? errors.year : ''" />
                 </div>
                 <div class="w-full mb-10">
                     <ErrorMessageComponent :message="errors?.server?.toString() ?? ''" />
