@@ -6,6 +6,7 @@ import { onMounted, ref, type Ref } from 'vue';
 
 export type InvoiceType = {
 
+    id: number,
     code: string
     date: string
     amount: number
@@ -21,7 +22,7 @@ const items: Ref<InvoiceType[] | undefined> = ref()
 
 const { pending, apiResponse, handlerFetch } = useFetch()
 
-const headers: string[] = ['Codice', 'Importo', 'Cliente' , 'Data', 'Pagata']
+const headers: string[] = ['Codice', 'Importo', 'Cliente' , 'Data', 'Pagata', '']
 
 onMounted(async () => {
 
@@ -59,7 +60,10 @@ onMounted(async () => {
                             <td class="border border-stone-100 py-2 px-3">{{ item.amount_it }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ item.company }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ new Date(item.date).toLocaleDateString() }}</td>
-                            <td class="border border-stone-100 py-2 px-3" :class="{'bg-green-700': item.paid == 1, 'bg-red-700': item.paid == 0}" ></td>                          
+                            <td class="border border-stone-100 py-2" :class="{'bg-green-700': item.paid == 1, 'bg-red-700': item.paid == 0}" ></td>                          
+                            <td class="border border-stone-100 py-2 px-3 text-center">
+                                <LinkButtonComponent :label="'Modifica'" :href="'/edit-invoice/' + item.id" />
+                            </td>                          
                         </tr>
                     </tbody>
                 </table>

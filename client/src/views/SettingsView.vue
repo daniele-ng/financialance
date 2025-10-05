@@ -4,8 +4,9 @@ import LinkButtonComponent from '@/components/LinkButtonComponent.vue';
 import { useFetch } from '@/lib/fetch';
 import { onMounted, ref, type Ref } from 'vue';
 
-type TaxRateType = {
+export type TaxRateType = {
 
+    id: number
     revenue: number
     tax: number
     inps: number
@@ -18,7 +19,7 @@ const items: Ref<TaxRateType[] | undefined> = ref()
 
 const { pending, apiResponse, handlerFetch } = useFetch()
 
-const headers: string[] = ['Redditività', 'Imposta', 'Quota INPS' , 'Acconto tasse', 'Anno']
+const headers: string[] = ['Redditività', 'Imposta', 'Quota INPS' , 'Acconto tasse', 'Anno', '']
 
 onMounted(async () => {
 
@@ -56,7 +57,10 @@ onMounted(async () => {
                             <td class="border border-stone-100 py-2 px-3">{{ item.tax }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ item.inps }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ item.advanceTaxPayment }}</td>
-                            <td class="border border-stone-100 py-2 px-3">{{ item.year }}</td>                          
+                            <td class="border border-stone-100 py-2 px-3">{{ item.year }}</td>                         
+                            <td class="border border-stone-100 py-2 px-3 text-center">
+                                <LinkButtonComponent :label="'Modifica'" :href="'/edit-tax-rate/' + item.year" />
+                            </td>                         
                         </tr>
                     </tbody>
                 </table>

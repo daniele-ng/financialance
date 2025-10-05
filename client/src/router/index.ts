@@ -3,6 +3,8 @@ import CreateAccountView from '@/views/CreateAccountView.vue'
 import CreateInvoiceView from '@/views/CreateInvoiceView.vue'
 import CreateTaxRateView from '@/views/CreateTaxRateView.vue'
 import DashboardView from '@/views/DashboardView.vue'
+import EditInvoiceView from '@/views/EditInvoiceView.vue'
+import EditTaxRateView from '@/views/EditTaxRateView.vue'
 import InvoicesView from '@/views/InvoicesView.vue'
 import LoginView from '@/views/LoginView.vue'
 import LogoutView from '@/views/LogoutView.vue'
@@ -43,6 +45,12 @@ const router = createRouter({
             meta: { protected: true}
         },
         {
+            path: "/edit-invoice/:id",
+            name: "EditInvoice",
+            component: EditInvoiceView,
+            meta: { protected: true}
+        },
+        {
             path: "/settings",
             name: "Settings",
             component: SettingsView,
@@ -52,6 +60,12 @@ const router = createRouter({
             path: "/new-tax-rate",
             name: "NewTaxRate",
             component: CreateTaxRateView,
+            meta: { protected: true}
+        },
+        {
+            path: "/edit-tax-rate/:year",
+            name: "EditTaxRate",
+            component: EditTaxRateView,
             meta: { protected: true}
         },
         {
