@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Put, UseGuards, UseInterceptors } from '@nestjs/common';
 import { ApiResponseDataType, ApiResponseType } from 'src/@types/api-response-type';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { TaxRatesService } from './tax-rates.service';
@@ -47,6 +47,38 @@ export class TaxRatesController {
     }
 
     /**
+     * @method GET
+     * @endpoint /api/tax-rate/:year
+     * 
+     * Get tax rate details
+     * 
+     * @param params route params. Tax rate year
+     * @returns Promise<ApiResponseDataType>
+     */
+    @Get('tax-rate/:year')
+    async getTaxRate(@Param() params: { year: number }): Promise<ApiResponseDataType> {
+
+        const response: ApiResponseDataType = { success: false, message: "", error: "", data: {} as TaxRate }
+
+        try {
+
+            const taxrate: TaxRate | null = await this.taxRatesService.getTaxRate(params.year)
+
+            response.success = true
+            response.data = taxrate
+
+        }
+        catch (err) {
+
+            response.error = "Errore server: " + err.message
+
+        }
+
+        return response
+
+    }
+
+    /**
      * @method POST
      * @endpoint /api/tax-rate
      * 
@@ -68,7 +100,7 @@ export class TaxRatesController {
             response.success = true
 
         }
-        catch(err) {
+        catch (err) {
 
             response.error = "Errore server: " + err.message
 
@@ -100,7 +132,7 @@ export class TaxRatesController {
             response.success = true
 
         }
-        catch(err) {
+        catch (err) {
 
             response.error = "Errore server: " + err.message
 
@@ -132,7 +164,7 @@ export class TaxRatesController {
             response.success = true
 
         }
-        catch(err) {
+        catch (err) {
 
             response.error = "Errore server: " + err.message
 
