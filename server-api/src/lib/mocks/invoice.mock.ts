@@ -54,4 +54,5 @@ export const mockUpdateInvoiceDto: UpdateInvoiceDto = {
     amount: 70.00,
     company: "test",
     date: new Date().toLocaleDateString('lt-LT'),
+    paid: 1,
 }

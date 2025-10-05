@@ -5,6 +5,7 @@
 import { IsCurrency, IsNotEmpty, Matches, IsDateString, MaxLength, IsOptional } from "class-validator";
 import { User } from "src/entities/user.entity";
 import { EntityExists } from "src/validators/entity-exists";
+import { Range } from "src/validators/range";
 
 // Define dto for creating a new invoice
 export class CreateInvoiceDto {
@@ -48,4 +49,8 @@ export class UpdateInvoiceDto {
     @IsNotEmpty({ message: "Campo obbligatorio" })
     @MaxLength(50, { message: "Massimo caratteri consentiti 50" })
     company: string
+
+    @IsOptional()
+    @Range({min: 0, max: 1}, { message: "Il campo può avere un valore 0 o 1" })
+    paid: number
 }
