@@ -79,7 +79,7 @@ export class InvoicesService {
                 amount: data.amount,
                 company: data.company,
                 month: parseInt(dateArray[1]),
-                year: parseInt(dateArray[2]),
+                year: parseInt(dateArray[0]),
                 paid: data.paid,
             }
         )
