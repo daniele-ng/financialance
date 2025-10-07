@@ -6,10 +6,10 @@ import { DataSource, DataSourceOptions } from "typeorm";
 
 export const AppDataSourceOptions: DataSourceOptions = {        
     type: "sqlite",
-    database: process.env.DATABASE_NAME ? "dist/database/" +  process.env.DATABASE_NAME : "dist/database/database.db",
-    synchronize: process.env.DATABASE_SYNCHRONIZE,
+    database: "dist/database/financialance.db",
+    synchronize: false,
     entities: ["dist/entities/*.entity.js"],        
-    migrationsRun: process.env.DATABASE_MIGRATION_AUTO_RUN,
+    migrationsRun: true,
     migrations: ["dist/database/migrations/*.js"],
     migrationsTableName: "history"
 };
