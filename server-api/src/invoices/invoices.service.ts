@@ -20,7 +20,7 @@ export class InvoicesService {
     getInvoices(limit?: number): Promise<Invoice[]> {
 
         return this.invoiceRepository.find({
-            order: { date: "DESC" },
+            order: { date: "DESC", code: "DESC" },
             take: limit
         })
     }
