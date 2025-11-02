@@ -34,18 +34,18 @@ onMounted(async () => {
                     </div>
                     <div v-if="showFinancialStmtData">
                         <ItemCardComponent :label-col-sx="'Fatturato lordo:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.income" />
+                            :label-col-dx="resFinancialStmt.data.income" />
                         <ItemCardComponent :label-col-sx="'Fatturato netto:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.net_income" />
+                            :label-col-dx="resFinancialStmt.data.net_income" />
                         <ItemCardComponent :label-col-sx="'Imponibile:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.taxable_income" />
-                        <ItemCardComponent :label-col-sx="'Tasse:'" :label-col-dx="'€ ' + resFinancialStmt.data.tax" />
+                            :label-col-dx="resFinancialStmt.data.taxable_income" />
+                        <ItemCardComponent :label-col-sx="'Tasse:'" :label-col-dx="resFinancialStmt.data.tax" />
                         <ItemCardComponent :label-col-sx="'Tasse INPS:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.inps_tax" />
+                            :label-col-dx="resFinancialStmt.data.inps_tax" />
                         <ItemCardComponent :label-col-sx="'Totale tasse:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.total_tax" />
+                            :label-col-dx="resFinancialStmt.data.total_tax" />
                         <ItemCardComponent :label-col-sx="'Anticipo tasse:'"
-                            :label-col-dx="'€ ' + resFinancialStmt.data.advance_tax_payment" />
+                            :label-col-dx="resFinancialStmt.data.advance_tax_payment" />
                     </div>
                 </CardComponent>
             </div>
@@ -55,7 +55,7 @@ onMounted(async () => {
                         <p class="text-[1rem]">Ultime 5 fatture emesse</p>
                     </div>
                     <div v-if="typeof resInvoices.data !== 'undefined'" v-for="item in resInvoices.data">
-                        <ItemCardComponent :label-col-sx="item.code" :label-col-dx="'€ ' + item.amount_it" />
+                        <ItemCardComponent :label-col-sx="item.code" :label-col-dx="item.amount_it" />
                     </div>
                 </CardComponent>
             </div>
