@@ -54,7 +54,7 @@ onMounted(async () => {
                     <LabelComponent :for="'amount'" :label="'Importo'" />
                 </div>
                 <div class="w-full mb-6">
-                    <InputComponent :id="'amount'" :name="'amount'" :value="item?.amount" :type="'text'" :required="false" :placeholder="'10.00'" />
+                    <InputComponent :id="'amount'" :name="'amount'" :value="item?.amount.toFixed(2)" :type="'text'" :required="false" :placeholder="'10.00'" />
                     <ErrorMessageComponent :message="typeof errors?.amount != 'undefined' ? errors.amount : ''" />
                 </div>
                 <div class="my-4">
