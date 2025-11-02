@@ -108,14 +108,28 @@ export class FinancialStatementsService {
             revenue_perc: taxRate.revenue.toFixed(2).replace(".", ","),
             tax_perc: taxRate.tax.toFixed(2).replace(".", ","),
             inps_perc: taxRate.inps.toFixed(2).replace(".", ","),
-            income: income.toFixed(2).replace(".", ","),
-            net_income: net_income.toFixed(2).replace(".", ","),
-            taxable_income: taxable_income.toFixed(2).replace(".", ","),
-            inps_tax: inps_tax.toFixed(2).replace(".", ","),
-            tax: tax.toFixed(2).replace(".", ","),
-            total_tax: total_tax.toFixed(2).replace(".", ","),
-            advance_tax_payment: advance_tax_payment.toFixed(2).replace(".", ",")
+            income: this.convertToLocalCurrency(income),
+            net_income: this.convertToLocalCurrency(net_income),
+            taxable_income: this.convertToLocalCurrency(taxable_income),
+            inps_tax: this.convertToLocalCurrency(inps_tax),
+            tax: this.convertToLocalCurrency(tax),
+            total_tax: this.convertToLocalCurrency(total_tax),
+            advance_tax_payment: this.convertToLocalCurrency(advance_tax_payment)
         }
 
+    }
+
+    /**
+     * Format a numeric value using the EU currency format
+     * 
+     * @param value numeric value
+     * @returns string
+     */
+    private convertToLocalCurrency(value: number): string {
+
+        return value.toLocaleString('de-DE', {
+            style: "currency",
+            currency: "EUR"
+        })
     }
 }

@@ -41,9 +41,10 @@ export class Invoice extends Base {
     @AfterLoad()
     localizeAmount() {
         
-        this.amount_it = this.amount.toFixed(2)
-        
-        this.amount_it = this.amount_it.replace('.', ',')
+        this.amount_it = this.amount.toLocaleString('de-DE', {
+            style: "currency",
+            currency: "EUR"
+        })
 
     }
 }
