@@ -21,6 +21,11 @@ Seguire la stessa procedura per installare i pacchetti node del client:
 financialance\client> npm install
 ```
 
+# Configurazione
+Sia il server API che il client possono essere configurati tramite file .env. In entrambe le cartelle sono presenti i file .env.example con la configurazione standard.
+
+Suggerimento pratico, rinominare il file .env.example in .env per avere una configurazione già pronta all'uso.
+
 # Avvio
 Per avviare il server-api eseguire il comando:
 ```bash
