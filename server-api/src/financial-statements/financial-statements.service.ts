@@ -29,6 +29,8 @@ export class FinancialStatementsService {
 
         if (typeof result === "undefined") return 0
 
+        if (result.income === null) return 0
+
         return Number(result.income.toFixed(2))
     }
 
