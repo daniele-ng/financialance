@@ -82,4 +82,12 @@ describe('InvoicesService', () => {
 
     })
 
+    it('should return a list of invoices for a given year', async() => {
+
+        jest.spyOn(repository, "find").mockResolvedValueOnce([mockInvoice1])
+        const result: Invoice[] = await service.getAnnualInvoices(2025)
+
+        expect(result.length).toBe(1)
+    })
+
 });

@@ -172,4 +172,24 @@ describe('InvoicesController', () => {
         expect(response.error).toContain("Errore server:")
 
     })
+
+    it('should get a list of invoices for a given year', async() => {        
+
+        jest.spyOn(service, "getAnnualInvoices").mockResolvedValueOnce([mockInvoice1, mockInvoice2])
+        const response: ApiResponseDataType = await controller.getAnnualInvoices({ year: 2025 })
+
+        expect(response.success).toBe(true)
+        expect(response.data).toMatchObject([mockInvoice1, mockInvoice2])
+
+    })
+
+    it('should show an error when getting invoices for a given year', async() => {
+
+        jest.spyOn(service, "getAnnualInvoices").mockResolvedValueOnce(new Promise (() => { throw Error}))
+        const response: ApiResponseDataType = await controller.getAnnualInvoices({ year: 2025 })
+
+        expect(response.success).toBe(false)
+        expect(response.error).toContain("Errore server:")
+
+    })
 });

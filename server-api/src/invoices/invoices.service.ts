@@ -26,6 +26,20 @@ export class InvoicesService {
     }
 
     /**
+     * Return a list of invoices for a given year
+     * 
+     * @param year calendar year
+     * @returns Promise<Invioce[]>
+     */
+    getAnnualInvoices(year: number): Promise<Invoice[]> {
+
+        return this.invoiceRepository.find({
+            where: { year: year },
+            order: { month: "ASC" }
+        })
+    } 
+
+    /**
      * Get invoice details
      * 
      * @param id invoice ID

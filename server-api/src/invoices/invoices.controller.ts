@@ -48,6 +48,37 @@ export class InvoicesController {
 
     /**
      * @method GET
+     * @endpoint /api/invoices/:year
+     * 
+     * Get invoices for a given year
+     * 
+     * @param params route params. Calendar year
+     * @returns Promise<ApiResponseDataType>
+     */
+    @Get('invoices/:year')
+    async getAnnualInvoices(@Param() params: { year: number }): Promise<ApiResponseDataType> {
+
+        const response: ApiResponseDataType = { success: false, message: "", error: "", data: {} as Invoice}
+
+        try {
+
+            const invoices: Invoice[] = await this.invoicesService.getAnnualInvoices(params.year)
+
+            response.success = true
+            response.data = invoices
+
+        }
+        catch (err) {
+
+            response.error = "Errore server: " + err.message
+
+        }
+
+        return response
+    }
+
+    /**
+     * @method GET
      * @endpoint /api/invoice/:id
      * 
      * Get invoice details
