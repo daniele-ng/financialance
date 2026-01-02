@@ -3,6 +3,8 @@ import CardComponent from '@/components/CardComponent.vue';
 import ItemCardComponent from '@/components/ItemCardComponent.vue';
 import { useFetch } from '@/lib/fetch';
 import { onMounted, type Ref, ref  } from 'vue';
+import MonthlyIncomeView from './MonthlyIncomeView.vue';
+import AnnualIncomeView from './AnnualIncomeView.vue';
 
 const year: Ref<number> = ref(new Date().getFullYear())
 const showFinancialStmtData: Ref<boolean> = ref(false)
@@ -60,5 +62,10 @@ onMounted(async () => {
                 </CardComponent>
             </div>
         </div>
+    </div>
+    <div class="py-8 px-16 box-content">
+        <h2 class="text-3xl text-blue-400 font-['Oxygen']">Statistiche</h2>
+        <MonthlyIncomeView />
+        <AnnualIncomeView />
     </div>
 </template>
