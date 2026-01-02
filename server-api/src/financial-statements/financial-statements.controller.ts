@@ -47,4 +47,33 @@ export class FinancialStatementsController {
         return response
 
     }
+
+    /**
+     * @method GET
+     * @endpoint /api/financial-statement/annual-income
+     * 
+     * Return the amount of the annual income
+     * 
+     * @param query HTTP query params
+     * @returns Promise<ApiResponseDataType>
+     */
+    @Get('financial-statement/annual-income')
+    async getAnnualIncome(@Query(new sanitizeHtmlPipe([])) query: { year_start: number, year_end: number}): Promise<ApiResponseDataType> {
+
+        const response: ApiResponseDataType = { success: false, message: "", error: "", data: [] as Array<{year: string, income: number}> }        
+
+        let year: number = query.year_start
+
+        for (year; year <= query.year_end; year++) {
+            
+            const income: number = await this.financialStmtsServices.getIncome(year)
+            
+            response.data.push({ year: year.toString(), income: income })
+        }        
+
+        response.success = true        
+
+        return response
+
+    }
 }
