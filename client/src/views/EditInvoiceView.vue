@@ -16,6 +16,8 @@ const route = useRoute()
 
 const item: Ref<InvoiceType | undefined> = ref()
 
+const paid: Ref<number> = ref(0)
+
 const { apiResponse, handlerFetch } = useFetch()
 
 const { pending, errors, handlerOnSubmit } = useForm("Invoices", false, true, invoiceSchema)
@@ -25,6 +27,8 @@ onMounted(async () => {
     await handlerFetch("/api/invoice/" + route.params.id)
 
     item.value = apiResponse.value.data as InvoiceType
+
+    paid.value = item.value.paid
 
 })
 
@@ -68,7 +72,7 @@ onMounted(async () => {
                     <LabelComponent :for="'paid'" :label="'Pagata'" />
                 </div>
                 <div class="w-full mb-6">
-                    <SelectComponent :id="'paid'" :name="'paid'" :required="false" :options="[{key: '0', label: 'No'}, {key: '1', label: 'Sì'}]" :selected-option="item?.paid.toString()"/>                               
+                    <SelectComponent :id="'paid'" :name="'paid'" :required="false" :options="[{key: '0', label: 'No'}, {key: '1', label: 'Sì'}]" v-model="paid"/>                               
                 </div>
                 <div class="w-full mb-10">
                     <ErrorMessageComponent :message="errors?.server?.toString() ?? ''" />
