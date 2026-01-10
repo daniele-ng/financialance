@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import DataLoaderComponent from '@/components/DataLoaderComponent.vue';
 import LinkButtonComponent from '@/components/LinkButtonComponent.vue';
+import TableHeaderComponent, { type HeaderType, type SortingType } from '@/components/TableHeaderComponent.vue';
 import { useFetch } from '@/lib/fetch';
 import { onMounted, ref, type Ref } from 'vue';
 
@@ -18,19 +19,39 @@ export type InvoiceType = {
     user: any
 
 }
+
 const items: Ref<InvoiceType[] | undefined> = ref()
 
 const { pending, apiResponse, handlerFetch } = useFetch()
 
-const headers: string[] = ['Codice', 'Importo', 'Cliente' , 'Data', 'Pagata', '']
+const headers: HeaderType[] = [
+    { label: "Data", sortable: true, sort_field: 'date' },
+    { label: "Codice", sortable: true, sort_field: 'code' },
+    { label: "Importo", sortable: true, sort_field: 'amount' },
+    { label: "Cliente", sortable: true, sort_field: 'company' },    
+    { label: "Pagata", sortable: false, sort_field: ''},
+    { label: "", sortable: false, sort_field: '' },
+]
 
 onMounted(async () => {
 
-    await handlerFetch("/api/invoices")
-
-    items.value = apiResponse.value.data as InvoiceType[]
+    await fetchInvoices()
 
 })
+
+async function fetchInvoices(params?: SortingType) {
+
+    let url: string  = "/api/invoices"
+
+    if (params != undefined) {
+
+        url += "?sort=" + params.field + "&sort_direction=" + params.direction
+    }    
+
+    await handlerFetch(url)
+
+    items.value = apiResponse.value.data as InvoiceType[]
+}
 
 </script>
 
@@ -47,19 +68,15 @@ onMounted(async () => {
                 <LinkButtonComponent :label="'Registra fattura'" :href="'/new-invoice'" />
             </div>
             <div v-if="typeof items !== 'undefined' && items.length > 0" class="my-8">
-                <LinkButtonComponent :label="'Registra fattura'" :href="'/new-invoice'" />
+                <LinkButtonComponent :label="'Registra fattura'" :href="'/new-invoice'" />                
                 <table class="w-full border border-stone-200 my-12">
-                    <thead>
-                        <tr>
-                            <th class="text-left py-2 px-3 border border-stone-100" v-for="header in headers">{{ header }}</th>
-                        </tr>
-                    </thead>
+                    <TableHeaderComponent :items="headers" :default_sort="{ field: 'date', direction: 'desc'}" @sorting="fetchInvoices" />
                     <tbody>
                         <tr v-for="item in items">
+                            <td class="border border-stone-100 py-2 px-3">{{ new Date(item.date).toLocaleDateString() }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ item.code }}</td>
                             <td class="border border-stone-100 py-2 px-3">{{ item.amount_it }}</td>
-                            <td class="border border-stone-100 py-2 px-3">{{ item.company }}</td>
-                            <td class="border border-stone-100 py-2 px-3">{{ new Date(item.date).toLocaleDateString() }}</td>
+                            <td class="border border-stone-100 py-2 px-3">{{ item.company }}</td>                            
                             <td class="border border-stone-100 py-2" :class="{'bg-green-700': item.paid == 1, 'bg-red-700': item.paid == 0}" ></td>                          
                             <td class="border border-stone-100 py-2 px-3 text-center">
                                 <LinkButtonComponent :label="'Modifica'" :href="'/edit-invoice/' + item.id" />
