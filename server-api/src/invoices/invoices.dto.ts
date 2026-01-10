@@ -3,7 +3,9 @@
  */
 
 import { IsCurrency, IsNotEmpty, Matches, IsDateString, MaxLength, IsOptional } from "class-validator";
+import { Invoice } from "src/entities/invoice.entity";
 import { User } from "src/entities/user.entity";
+import { QueryDto } from "src/lib/query.dto";
 import { EntityExists } from "src/validators/entity-exists";
 import { Range } from "src/validators/range";
 
@@ -54,3 +56,6 @@ export class UpdateInvoiceDto {
     @Range({min: 0, max: 1}, { message: "Il campo può avere un valore 0 o 1" })
     paid: number
 }
+
+// Define query params for results filtering
+export class QueryInvoiceDto extends QueryDto<Invoice> {}

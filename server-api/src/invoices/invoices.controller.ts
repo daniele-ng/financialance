@@ -5,7 +5,7 @@ import { ApiResponseDataType, ApiResponseType } from 'src/@types/api-response-ty
 import { Invoice } from 'src/entities/invoice.entity';
 import { NoFilesInterceptor } from '@nestjs/platform-express';
 import { sanitizeHtmlPipe } from 'src/lib/pipes/sanitize-html.pipe';
-import { CreateInvoiceDto, UpdateInvoiceDto } from './invoices.dto';
+import { CreateInvoiceDto, QueryInvoiceDto, UpdateInvoiceDto } from './invoices.dto';
 
 @UseGuards(AuthGuard)
 @Controller('api')
@@ -24,13 +24,13 @@ export class InvoicesController {
      * @returns Promise<ApiResponseDataType>
      */
     @Get('invoices')    
-    async getInvoices(@Query() query: { limit?: number }): Promise<ApiResponseDataType> {
+    async getInvoices(@Query() query?: any): Promise<ApiResponseDataType> {
 
         const response: ApiResponseDataType = { success: false, message: "", error: "", data: {} as Invoice }
 
         try {
 
-            const invoices: Invoice[] = await this.invoicesService.getInvoices(query.limit)
+            const invoices: Invoice[] = await this.invoicesService.getInvoices(query as QueryInvoiceDto)
 
             response.success = true
             response.data = invoices

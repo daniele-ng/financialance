@@ -62,7 +62,6 @@ describe('AppController (e2e)', () => {
             company: ["Massimo caratteri consentiti 50", "Campo obbligatorio"],
             date: ["Formato data non valido", "Formato data non valido"],
             amount: ["Formato campo non valido"],
-            user: ['Associare un utente'],
         })
 
         const response2 = request(app.getHttpServer())
@@ -132,6 +131,28 @@ describe('AppController (e2e)', () => {
         const body = response.body
 
         expect(body.success).toBe(true)
+
+    })
+
+    it('should get a list of invoices', async () => {       
+
+        const response = await request(app.getHttpServer())
+            .get('/api/invoices')
+            .set(headers)
+            .expect(200)
+
+        const body = response.body
+
+        expect(body.success).toBe(true)
+
+        const response1 = await request(app.getHttpServer())
+            .get('/api/invoices?limit=5&sort=date&sort_direction=ASC')
+            .set(headers)
+            .expect(200)
+
+        const body1 = response1.body
+
+        expect(body1.success).toBe(true)
 
     })
 

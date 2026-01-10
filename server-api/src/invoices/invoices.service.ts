@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Invoice } from 'src/entities/invoice.entity';
-import { Repository, UpdateResult } from 'typeorm';
-import { CreateInvoiceDto, UpdateInvoiceDto } from './invoices.dto';
+import { FindOptionsOrder, FindOptionsOrderValue, Repository, UpdateResult } from 'typeorm';
+import { CreateInvoiceDto, QueryInvoiceDto, UpdateInvoiceDto } from './invoices.dto';
 
 @Injectable()
 export class InvoicesService {
@@ -17,11 +17,30 @@ export class InvoicesService {
      * 
      * @returns Promise<Invoice[]>
      */
-    getInvoices(limit?: number): Promise<Invoice[]> {
+    getInvoices(params?: QueryInvoiceDto): Promise<Invoice[]> {
+
+        let sort: FindOptionsOrder<Invoice> = { date: "DESC" }
+        let limit: number|undefined = undefined
+
+        if (params !== undefined) {
+
+            if (params?.sort  && params?.sort_direction) {
+
+                sort = { [params.sort] : params.sort_direction }
+
+            }
+
+            if (params?.limit !== undefined) {
+
+                limit = params.limit
+
+            }
+
+        }
 
         return this.invoiceRepository.find({
-            order: { date: "DESC", code: "DESC" },
-            take: limit
+            order: sort,
+            take: params?.limit
         })
     }
 
