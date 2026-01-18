@@ -5,8 +5,12 @@ import { useFetch } from '@/lib/fetch';
 import { onMounted, type Ref, ref  } from 'vue';
 import MonthlyIncomeView from './MonthlyIncomeView.vue';
 import AnnualIncomeView from './AnnualIncomeView.vue';
+import { currentYear, years } from '@/lib/years';
+import LabelComponent from '@/components/form/LabelComponent.vue';
+import SelectComponent from '@/components/form/SelectComponent.vue';
 
-const year: Ref<number> = ref(new Date().getFullYear())
+
+const year: Ref<number> = ref(currentYear)
 const showFinancialStmtData: Ref<boolean> = ref(false)
 
 const { pending: pendingFinancialStmt, apiResponse: resFinancialStmt, handlerFetch: fetchFinancialStmt } = useFetch()
@@ -15,19 +19,24 @@ const { pending: pendingInvoices, apiResponse: resInvoices, handlerFetch: fetchI
 onMounted(async () => {    
 
     await fetchInvoices('/api/invoices?limit=5')
+    await updateFinancialStmt()
+
+})
+
+async function updateFinancialStmt() {
+
     await fetchFinancialStmt('/api/financial-statement?year=' + year.value)    
 
     showFinancialStmtData.value = typeof resFinancialStmt.value.data != 'undefined' && Object.entries(resFinancialStmt.value.data).length > 0
-
-})
+}
 
 </script>
 
 <template>
     <div class="py-8 px-16 box-content">
-        <h2 class="text-3xl text-blue-400 font-['Oxygen']">Dashboard</h2>
+        <h2 class="text-3xl text-blue-400 font-['Oxygen']">Dashboard</h2>        
         <div class="flex flex-row w-full my-12">
-            <div class="basis-1/2">
+            <div class="basis-1/2">                
                 <CardComponent :title="'Bilancio ' + year" :error="resFinancialStmt.error" :show-loader="pendingFinancialStmt">
                     <div v-if="showFinancialStmtData" class="mb-6">
                         <span class="text-[1rem]">Redditività: {{ resFinancialStmt.data.revenue_perc }}%</span>
@@ -49,6 +58,13 @@ onMounted(async () => {
                         <ItemCardComponent :label-col-sx="'Anticipo tasse:'"
                             :label-col-dx="resFinancialStmt.data.advance_tax_payment" />
                     </div>
+                    <div v-if="showFinancialStmtData" class="my-4">
+                        <LabelComponent :for="'year'" :label="'Cambia anno'" />
+                        <div class="w-full max-w-[200px] inline-block ml-6">
+                            <SelectComponent :id="'year'" :name="'year'" :required="false" :options="years" 
+                                v-model="year" @change="updateFinancialStmt()" />
+                        </div>
+                    </div>                    
                 </CardComponent>
             </div>
             <div class="basis-1/2">

@@ -7,7 +7,6 @@ import router from '@/router'
 import { Auth } from './auth'
 import { ZodValidation } from './zod/validation'
 import type { ZodObject } from 'zod'
-import { invoiceSchema } from './zod/schemas/invoice.schema'
 
 export function useForm(redirectTo: string, isLogin: boolean = false, credentials: boolean = false, zodSchema?: ZodObject) {
 

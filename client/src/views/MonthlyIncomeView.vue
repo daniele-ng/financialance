@@ -5,22 +5,13 @@ import DataLoaderComponent from '@/components/DataLoaderComponent.vue';
 import LabelComponent from '@/components/form/LabelComponent.vue';
 import SelectComponent from '@/components/form/SelectComponent.vue';
 import { useFetch } from '@/lib/fetch';
+import { currentYear, years } from '@/lib/years';
 import type { InvoiceType } from '@/views/InvoicesView.vue';
 import { onMounted, ref, type Ref } from 'vue';
 
 const { pending, apiResponse, handlerFetch } = useFetch()
 
-const date = new Date()
-const year: Ref<number> = ref(date.getFullYear())
-
-const years: { [key: string]: string }[] = []
-
-for (let index = 2025; index <= year.value; index++) {
-    
-    const value: string = index.toString()
-
-    years.push({ key: value, label: value })
-}
+const year: Ref<number> = ref(currentYear)
 
 const chartOptions = {
     responsive: true,

@@ -10,7 +10,7 @@ const props = defineProps<{
     onChange?: any
 }>()
 
-const style: string = "w-full border h-9 px-2 box-border border-gray-200 focus:border-blue-300 focus:ring-0 focus:outline-none rounded-md shadow-sm"
+const style: string = "w-full bg-white border h-9 px-2 box-border border-gray-200 focus:border-blue-300 focus:ring-0 focus:outline-none rounded-md shadow-sm"
 
 </script>
 

@@ -12,7 +12,7 @@ defineProps<{
 
 <template>
 
-    <div class="w-full max-w-[400px] h-[400px] mx-auto py-4 px-8 box-border bg-stone-100 rounded-2xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
+    <div class="w-full max-w-[400px] h-[400px] mx-auto py-4 px-8 box-border bg-stone-50 rounded-2xl shadow-[0px_4px_4px_0px_rgba(0,0,0,0.25)]">
         <h3 class="text-[1.3rem] mb-4">{{ title }}</h3>
         <div v-if="showLoader" class="flex justify-center">
             <DataLoaderComponent :show="showLoader" />
