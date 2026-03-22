@@ -9,6 +9,7 @@ import { TokensModule } from './tokens/tokens.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
+import { CostsModule } from './costs/costs.module';
 
 @Module({
     imports: [
@@ -36,7 +37,8 @@ import { JwtModule } from '@nestjs/jwt';
         UsersModule,
         FinancialStatementsModule,
         InvoicesModule,
-        TaxRatesModule
+        TaxRatesModule,
+        CostsModule
     ]
 })
 export class AppModule { }

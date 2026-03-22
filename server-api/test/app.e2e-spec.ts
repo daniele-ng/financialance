@@ -124,6 +124,26 @@ describe('AppController (e2e)', () => {
             .get('/api/financial-statement')
             .set(headers)
             .expect(403)
+
+        request(app.getHttpServer())
+            .get('/api/costs')
+            .set(headers)
+            .expect(403)
+
+        request(app.getHttpServer())
+            .post('/api/cost')
+            .set(headers)
+            .expect(403)
+
+        request(app.getHttpServer())
+            .put('/api/cost')
+            .set(headers)
+            .expect(403)
+
+        request(app.getHttpServer())
+            .delete('/api/cost')
+            .set(headers)
+            .expect(403)
     })
 
     it('should create an account', async () => {
