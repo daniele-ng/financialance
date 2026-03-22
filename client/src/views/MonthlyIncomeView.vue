@@ -8,6 +8,7 @@ import { useFetch } from '@/lib/fetch';
 import { currentYear, years } from '@/lib/years';
 import type { InvoiceType } from '@/views/InvoicesView.vue';
 import { onMounted, ref, type Ref } from 'vue';
+import type { CostType } from './CostsView.vue';
 
 const { pending, apiResponse, handlerFetch } = useFetch()
 
@@ -34,42 +35,57 @@ onMounted(async () => {
     await updateChart()
 })
 
-async function updateChart() {    
+async function getDataset(url: string): Promise<number[]> {
 
-    await handlerFetch("/api/invoices/" + year.value)
+    await handlerFetch(url)
 
-    const invoices: InvoiceType[] = apiResponse.value.data as InvoiceType[]
+    const results: (InvoiceType | CostType)[] = apiResponse.value.data as (InvoiceType | CostType)[]
 
-    if (typeof invoices !== "undefined" && invoices.length > 0) {
+    const data: number[] = []
+
+    if (typeof results !== "undefined" && results.length > 0) {
 
         const months: string[] = lineDatasets.value.labels
-
-        const data: number[] = []
 
         months.forEach((month, index) => {            
 
             const itaMonthIndex = index + 1
-            const monthInvoices: InvoiceType[] = invoices.filter((item) => item.month == itaMonthIndex)
+            const monthResults: (InvoiceType | CostType)[] = results.filter((item) => item.month == itaMonthIndex)
 
-            const sum: number = monthInvoices.reduce(
-                (accumulator, invoice) => accumulator + invoice.amount,
+            const sum: number = monthResults.reduce(
+                (accumulator, result) => accumulator + result.amount,
                 0,
             )
 
             data.push(sum)
         })
+    }
 
-        lineDatasets.value = {
-            ...lineDatasets.value,
-            datasets: [
-                {                    
-                    label: "Entrate " + year.value,
-                    backgroundColor: "#36A2EB33",
-                    borderColor: "#36A2EB",
-                    data: [...data]
-                }
-            ]
-        }
+    return data
+}
+
+async function updateChart() {
+
+    const invoiceDataset: number[] = await getDataset("/api/invoices/" + year.value)
+
+    const costDataset: number[] = await getDataset("/api/costs?year=" + year.value)
+    
+    lineDatasets.value = {
+        ...lineDatasets.value,
+        datasets: [
+            {                    
+                label: "Entrate " + year.value,
+                backgroundColor: "#36A2EB33",
+                borderColor: "#36A2EB",
+                data: [...invoiceDataset]
+            },
+            {                    
+                label: "Spese " + year.value,
+                backgroundColor: "#FF638433",
+                borderColor: "#FF6384",
+                data: [...costDataset]
+            }
+        ]
     }
 }
 
