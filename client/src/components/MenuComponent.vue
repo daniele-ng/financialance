@@ -16,6 +16,9 @@ const isOpen: Ref<boolean> = ref(false)
                 <RouterLink to="/invoices">Fatture</RouterLink>
             </div>
             <div class="basis-auto text-blue-400 hover:text-stone-950 hover:cursor-pointer ml-5">
+                <RouterLink to="/costs">Spese</RouterLink>
+            </div>
+            <div class="basis-auto text-blue-400 hover:text-stone-950 hover:cursor-pointer ml-5">
                 <RouterLink to="/settings">Impostazioni</RouterLink>
             </div>
             <div class="basis-auto text-blue-400 hover:text-stone-950 hover:cursor-pointer ml-5">                
@@ -39,10 +42,13 @@ const isOpen: Ref<boolean> = ref(false)
                         <RouterLink :class="'text-white'" to="/invoices" @click="isOpen = false">Fatture</RouterLink>
                     </li>
                     <li class="py-2">
+                        <RouterLink :class="'text-white'" to="/costs" @click="isOpen = false">Spese</RouterLink>
+                    </li>
+                    <li class="py-2">
                         <RouterLink :class="'text-white'" to="/settings" @click="isOpen = false">Impostazioni</RouterLink>
                     </li>
                     <li class="py-2">
-                        <RouterLink :class="'text-white'" to="/logout" @click="isOpen = false">Impostazioni</RouterLink>
+                        <RouterLink :class="'text-white'" to="/logout" @click="isOpen = false">Esci</RouterLink>
                     </li>
                 </ul>
             </div>

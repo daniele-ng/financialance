@@ -1,8 +1,11 @@
 import { Auth } from '@/lib/auth'
+import CostsView from '@/views/CostsView.vue'
 import CreateAccountView from '@/views/CreateAccountView.vue'
+import CreateCostView from '@/views/CreateCostView.vue'
 import CreateInvoiceView from '@/views/CreateInvoiceView.vue'
 import CreateTaxRateView from '@/views/CreateTaxRateView.vue'
 import DashboardView from '@/views/DashboardView.vue'
+import EditCostView from '@/views/EditCostView.vue'
 import EditInvoiceView from '@/views/EditInvoiceView.vue'
 import EditTaxRateView from '@/views/EditTaxRateView.vue'
 import InvoicesView from '@/views/InvoicesView.vue'
@@ -73,6 +76,24 @@ const router = createRouter({
             name: "Logout",
             component: LogoutView,
             meta: { protected: false }
+        },
+        {
+            path: "/costs",
+            name: "Costs",
+            component: CostsView,
+            meta: { protected: true }
+        },
+        {
+            path: "/new-cost",
+            name: "NewCost",
+            component: CreateCostView,
+            meta: { protected: true }
+        },
+        {
+            path: "/edit-cost/:id",
+            name: "EditCost",
+            component: EditCostView,
+            meta: { protected: true }
         }
     ],
 })
