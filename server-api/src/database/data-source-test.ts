@@ -3,6 +3,7 @@
  */
 
 
+import { Cost } from "src/entities/cost.entity";
 import { Invoice } from "src/entities/invoice.entity";
 import { TaxRate } from "src/entities/tax-rate.entity";
 import { Token } from "src/entities/token.entity";
@@ -13,7 +14,7 @@ export const AppDataSourceTestOptions: DataSourceOptions = {
     type: "sqlite",
     database: ":memory:",
     synchronize: true,
-    entities: [Invoice, User, Token, TaxRate],
+    entities: [Invoice, User, Token, TaxRate, Cost],
     migrationsRun: true,
     migrations: ["./src/database/migrations/*.ts"],
     migrationsTableName: "history",
