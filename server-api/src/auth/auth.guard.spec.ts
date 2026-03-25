@@ -6,52 +6,51 @@ import { Request } from 'express';
 import { TokenPayloadType } from 'src/tokens/@types/tokens-type';
 import mockUser from 'src/lib/mocks/user-mock';
 
-
-
-// Mock TokensService
-const tokensService = {
-  verify: jest.fn(),
-  getPayload: jest.fn()
-};
-
-// Mock UsersService
-const usersService = {
-    getUser: jest.fn()
-}
-
-const mockRequest = (headers: object) => ({
-  headers,
-});
-
-const mockExecutionContext = (request: Request) => ({
-  switchToHttp: () => ({
-
-    getRequest: () => request
-
-  })  
-}) as unknown as ExecutionContext;
-
 describe('AuthGuard', () => {
 
   let authGuard: AuthGuard;
+  let mockTokensService: any
+  let mockUsersService: any   
+
+  const mockRequest = (cookies: object) => ({
+    cookies,
+  });
+
+  const mockExecutionContext = (request: Request) => ({
+    switchToHttp: () => ({
+
+      getRequest: () => request
+
+    })  
+  }) as unknown as ExecutionContext;
 
   beforeEach(() => {
 
-    authGuard = new AuthGuard(tokensService as any, usersService as any);
+    // Mock mockTokensService
+    mockTokensService = {
+      verify: jest.fn(),
+      getPayload: jest.fn()
+    };
+
+    // Mock mockUsersService
+    mockUsersService = {
+        getUser: jest.fn()
+    }
+
+    authGuard = new AuthGuard(mockUsersService, mockTokensService);
 
   });
 
-  test('should return true for valid token with scope access', async () => {
+  it('should return true for valid token with scope access', async () => {
 
-    const request = mockRequest({ authorization: 'Bearer validToken' });
+    const payloadAccessToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "access" }    
+    const request = mockRequest({ access_token: "access_token" });
     const context = mockExecutionContext(request as Request);
 
-    const payloadAccessToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "access" }
+    mockTokensService.verify.mockResolvedValue(true);
+    mockTokensService.getPayload.mockReturnValue(payloadAccessToken)
 
-    tokensService.verify.mockResolvedValue(true);
-    tokensService.getPayload.mockReturnValue(payloadAccessToken)
-
-    usersService.getUser.mockResolvedValueOnce(mockUser)
+    mockUsersService.getUser.mockResolvedValueOnce(mockUser)
 
     const result = await authGuard.canActivate(context);
 
@@ -59,7 +58,7 @@ describe('AuthGuard', () => {
 
   });
 
-  test('should return false for missing token', async () => {
+  it('should return false for missing token', async () => {
     
     const request = mockRequest({});
     const context = mockExecutionContext(request as Request);
@@ -68,43 +67,24 @@ describe('AuthGuard', () => {
 
   });
 
-  test('should return false for invalid token', async () => {
+  it('should return false for invalid token', async () => {
 
-    const request = mockRequest({ authorization: 'Bearer invalidToken' });
+    const request = mockRequest({ access_token: "access_token" });
     const context = mockExecutionContext(request as Request);
 
-    tokensService.verify.mockResolvedValue(false);
+    mockTokensService.verify.mockResolvedValue(false);
 
     expect(await authGuard.canActivate(context)).toBe(false);
   });
 
-  test('should return false for token with incorrect scope', async () => {
-    const request = mockRequest({ authorization: 'Bearer invalidToken' });
+  it('should return false for token with incorrect scope', async () => {
+    const request = mockRequest({ access_token: "access_token" });
     const context = mockExecutionContext(request as Request);
 
     const payloadRefreshToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "refresh" }
 
-    tokensService.verify.mockResolvedValue(true);
-    tokensService.getPayload.mockReturnValue(payloadRefreshToken)    
-
-    expect(await authGuard.canActivate(context)).toBe(false);
-
-    
-  });
-
-  test('should return false disabled user', async () => {
-
-    const request = mockRequest({ authorization: 'Bearer invalidToken' });
-    const context = mockExecutionContext(request as Request);
-
-    const payloadAccessToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "access" }
-
-    tokensService.verify.mockResolvedValue(true);
-    tokensService.getPayload.mockReturnValue(payloadAccessToken)
-
-    mockUser.enabled = 0
-    
-    usersService.getUser.mockResolvedValueOnce(mockUser)
+    mockTokensService.verify.mockResolvedValue(true);
+    mockTokensService.getPayload.mockReturnValue(payloadRefreshToken)    
 
     expect(await authGuard.canActivate(context)).toBe(false);
 

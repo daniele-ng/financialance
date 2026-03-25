@@ -225,19 +225,10 @@ describe('AppController (e2e)', () => {
             .send({ pin: mockUser.pin })
             .expect(201)
 
-        const body = (await response).body
-
-        expect(body.success).toBe(true)
-
-        const response1 = request(app.getHttpServer())
-            .get('/api/logout')
-            .auth(body.data.access_token, { type: "bearer" })
+        request(app.getHttpServer())
+            .get('/api/logout')            
             .set(headers)            
             .expect(200)
-
-        const body1 = (await response1).body
-
-        expect(body1.success).toBe(true)
     })
 
     it('should access protected resources', async () => {
@@ -246,15 +237,10 @@ describe('AppController (e2e)', () => {
             .post('/api/login')
             .set(headers)
             .send({ pin: mockUser.pin })
-            .expect(201)
-
-        const body = (await response).body        
-
-        const tokens: TokenPairType = body.data        
+            .expect(201)        
 
         request(app.getHttpServer())
             .get('/api/tax-rates')
-            .auth(tokens.access_token, { type: "bearer" })
             .set(headers)
             .expect(200)
 

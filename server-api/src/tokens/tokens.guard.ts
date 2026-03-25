@@ -20,9 +20,9 @@ export class TokensGuard implements CanActivate {
      */
     async canActivate(context: ExecutionContext): Promise<boolean> {
 
-        // Extract Bearer token from http request header
+        // Extract refresh token from cookie
         const request: Request = context.switchToHttp().getRequest()
-        const token = this.extractTokenFromHeader(request)
+        const token: string | undefined = request.cookies?.['refresh_token'] ?? undefined
 
         if (!token) return false
 
@@ -41,20 +41,6 @@ export class TokensGuard implements CanActivate {
         await this.tokensService.disable(token)
 
         return true
-
-    }
-
-    /**
-     * Return bearer token from request header, if any
-     * 
-     * @param request incoming HTTP request
-     * @returns string | undefined
-     */
-    private extractTokenFromHeader(request: Request): string | undefined {
-
-        const [type, token] = request.headers.authorization?.split(' ') ?? []
-
-        return type === "Bearer" ? token : undefined
 
     }
 

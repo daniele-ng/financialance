@@ -22,6 +22,7 @@ const mockResponse = (): any => {
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
     res.send = jest.fn().mockReturnValue(res);
+    res.cookie = jest.fn().mockReturnValue(res);
     return res;
 }
 
@@ -93,16 +94,18 @@ describe('AuthController', () => {
         const result = await controller.login(validAuthDto, response) 
         
         expect(result.success).toBe(true)
-        expect(result.data).toMatchObject(tokens)       
 
     })
 
     it('should logout', async() => {
 
         jest.spyOn(usersService, "getUser").mockResolvedValueOnce(mockUser)
-        jest.spyOn(authService, "signOut").mockResolvedValueOnce()
+        jest.spyOn(authService, "signOut").mockResolvedValueOnce()        
 
-        const result = await controller.logout()
+        const response = mockResponse()
+
+        const result = await controller.logout(response)
+
         expect(result.success).toBe(true)
 
     })
@@ -112,12 +115,13 @@ describe('AuthController', () => {
         const tokenPair: TokenPairType = { access_token: "newaccesstoken", refresh_token: "newrefreshtoken" }
         
         jest.spyOn(usersService, "getUser").mockResolvedValueOnce(mockUser)
-        jest.spyOn(authService, "getNewTokens").mockResolvedValueOnce(tokenPair)
+        jest.spyOn(authService, "getNewTokens").mockResolvedValueOnce(tokenPair)        
 
-        const result = await controller.tokens()
+        const response = mockResponse()
+
+        const result = await controller.tokens(response)
 
         expect(result.success).toBe(true)
-        expect(result.data).toMatchObject(tokenPair)
 
     })
 
@@ -126,7 +130,9 @@ describe('AuthController', () => {
         jest.spyOn(usersService, "getUser").mockResolvedValueOnce(mockUser)
         jest.spyOn(authService, "getNewTokens").mockResolvedValueOnce(null)
 
-        const result = await controller.tokens()
+        const response = mockResponse()
+
+        const result = await controller.tokens(response)
 
         expect(result.success).toBe(false)
         expect(result.error).toContain("Errore server")

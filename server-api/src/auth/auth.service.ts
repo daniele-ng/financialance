@@ -6,6 +6,7 @@ import { TokensService } from 'src/tokens/tokens.service';
 import { User } from 'src/entities/user.entity';
 import { Token } from 'src/entities/token.entity';
 import CheckPassword from 'src/lib/bcrypt/check-password';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -92,6 +93,34 @@ export class AuthService {
 
         await this.tokensService.disable(token)
 
+    }
+
+    /**
+     * Set access and refresh HTTPOnly cookies
+     * 
+     * @param res HTTP response object
+     * @param tokens access and refresh tokens
+     * @param secure secure flag for cookie
+     */
+    setHttpOnlyCookie(res: Response, tokens: TokenPairType, maxAge: number, secure: boolean = false): void {        
+
+        // Set access token cookie
+        res.cookie('access_token', tokens.access_token, {
+            httpOnly: true,
+            secure: secure,
+            sameSite: 'lax',
+            maxAge: maxAge * 1000,
+            path: '/',
+        })
+
+        // Set refresh token cookie
+        res.cookie('refresh_token', tokens.refresh_token, {
+            httpOnly: true,
+            secure: secure,
+            sameSite: 'lax',
+            maxAge: maxAge * 1000,
+            path: '/',
+        })
     }
 
 }

@@ -4,15 +4,9 @@ import { Request } from 'express';
 import { TokenPayloadType } from 'src/tokens/@types/tokens-type';
 import mockUser from 'src/lib/mocks/user-mock';
 
-// Mock TokensService
-const tokensService = {
-    verify: jest.fn(),
-    getPayload: jest.fn(),
-    disable: jest.fn()
-};
 
-const mockRequest = (headers: object) => ({
-    headers,
+const mockRequest = (cookies: object) => ({
+    cookies,
 });
 
 const mockExecutionContext = (request: Request) => ({
@@ -26,17 +20,25 @@ const mockExecutionContext = (request: Request) => ({
 
 describe('TokensGuard', () => {
 
-    let tokensGuard: TokensGuard
+    let tokensGuard: TokensGuard;
+    let tokensService: any;    
 
     beforeEach(() => {
 
-        tokensGuard = new TokensGuard(tokensService as any)
+        // Mock TokensService
+        tokensService = {
+            verify: jest.fn(),
+            getPayload: jest.fn(),
+            disable: jest.fn()
+        };
+
+        tokensGuard = new TokensGuard(tokensService)
 
     })
 
     test('should return true for valid token with scope refresh', async () => {
 
-        const request = mockRequest({ authorization: 'Bearer validToken' });
+        const request = mockRequest({ refresh_token: "refresh_token" });
         const context = mockExecutionContext(request as Request);
 
         const payloadAccessToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "refresh" }
@@ -60,7 +62,7 @@ describe('TokensGuard', () => {
 
     test('should return false for invalid token', async () => {
 
-        const request = mockRequest({ authorization: 'Bearer invalidToken' });
+        const request = mockRequest({ refresh_token: "refresh_token" });
         const context = mockExecutionContext(request as Request);
 
         tokensService.verify.mockResolvedValueOnce(false);
@@ -69,7 +71,7 @@ describe('TokensGuard', () => {
     });
 
     test('should return false for token with incorrect scope', async () => {
-        const request = mockRequest({ authorization: 'Bearer invalidToken' });
+        const request = mockRequest({ refresh_token: "refresh_token" });
         const context = mockExecutionContext(request as Request);
 
         const payloadRefreshToken: TokenPayloadType = { sub: mockUser.id.toString(), scope: "access" }

@@ -30,18 +30,19 @@ export class AuthController {
      */
     @Post('login')
     @UseInterceptors(NoFilesInterceptor)
-    async login(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response): Promise<ApiResponseDataType> {
+    async login(@Body() data: AuthDto, @Res({ passthrough: true }) res: Response): Promise<ApiResponseType> {
 
-        const response: ApiResponseDataType = { success: false, message: "", error: "", data: {} as TokenPairType | null }
+        const response: ApiResponseType = { success: false, message: "", error: "" }
 
         try {
 
-            response.data = await this.authService.signIn(data)
+            const tokens: TokenPairType | null = await this.authService.signIn(data)
 
-            if (response.data != null) {
+            if (tokens != null) {
 
                 response.success = true
 
+                this.authService.setHttpOnlyCookie(res, tokens, process.env.HTTP_ONLY_COOKIE_MAXAGE)
             }
             else {
 
@@ -70,7 +71,7 @@ export class AuthController {
      */
     @UseGuards(AuthGuard)
     @Get('logout')
-    async logout(): Promise<ApiResponseType> {
+    async logout(@Res({ passthrough: true }) res: Response): Promise<ApiResponseType> {
 
         const response: ApiResponseType = { success: false, message: "", error: "" }
 
@@ -80,7 +81,10 @@ export class AuthController {
 
             try {
 
-                await this.authService.signOut(user)
+                await this.authService.signOut(user)                
+
+                this.authService.setHttpOnlyCookie(res, {"access_token": "" , "refresh_token": ""} , -1)
+
                 response.success = true
 
             }
@@ -105,25 +109,27 @@ export class AuthController {
      * @endpoint /api/tokens
      * 
      * Return a new token pair
-     *      
+     * 
+     * @param res HTTP response object     
      * @returns Promise<ApiResponseDataType>
      */
     @UseGuards(TokensGuard)
     @Get('tokens')
-    async tokens(): Promise<ApiResponseDataType> {
+    async tokens(@Res({ passthrough:true }) res: Response): Promise<ApiResponseType> {
 
-        const response: ApiResponseDataType = { success: false, message: "", error: "", data: {} as TokenPairType | null }
+        const response: ApiResponseType = { success: false, message: "", error: "" }
 
         const user: User | null = await this.usersService.getUser(false)
 
         if (user != null) {
 
-            response.data = await this.authService.getNewTokens(user)
+            const tokens: TokenPairType | null = await this.authService.getNewTokens(user)
 
-            if (response.data != null) {
+            if (tokens != null) {
 
                 response.success = true
 
+                this.authService.setHttpOnlyCookie(res, tokens, process.env.HTTP_ONLY_COOKIE_MAXAGE)
             }
             else {
 
