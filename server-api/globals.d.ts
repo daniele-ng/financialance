@@ -11,6 +11,8 @@ namespace NodeJS {
         DATABASE_NAME: string
         DATABASE_SYNCHRONIZE: boolean
         DATABASE_MIGRATION_AUTO_RUN: boolean
+        HTTP_ONLY_COOKIE_MAXAGE:number
+        CORS_ALLOWED_ORIGIN: string | string[]
     }
 
 }
