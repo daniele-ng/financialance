@@ -17,7 +17,7 @@ const item: Ref<CostType | undefined> = ref()
 
 const { apiResponse, handlerFetch } = useFetch()
 
-const { pending, errors, handlerOnSubmit } = useForm("Costs", false, true, costSchema)
+const { pending, errors, handlerOnSubmit } = useForm("Costs", false, costSchema)
 
 onMounted(async () => {
 

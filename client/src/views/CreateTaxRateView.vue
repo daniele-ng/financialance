@@ -6,7 +6,7 @@ import LabelComponent from '@/components/form/LabelComponent.vue';
 import { useForm } from '@/lib/form';
 
 
-const { pending, errors, handlerOnSubmit } = useForm("Settings", false, true)
+const { pending, errors, handlerOnSubmit } = useForm("Settings", false)
 
 </script>
 

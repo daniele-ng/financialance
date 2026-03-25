@@ -14,7 +14,7 @@ onMounted(async () => {
 
     if (apiResponse.value.success) {
 
-        Auth.deleteTokens()
+        Auth.logout()
 
         router.push({ name: "Login" })
 

@@ -2,7 +2,7 @@
  * Composable to deal with axios request
  */
 import { ref, type Ref } from 'vue'
-import { ajaxRequestWithBearerToken, type AxiosResponseJsonType } from './axios-wrapper'
+import { callApi, type AxiosResponseJsonType } from './axios-wrapper'
 
 type ApiResponseType = { success: boolean, message: string, error: string, data?: any }
 
@@ -16,7 +16,7 @@ export function useFetch() {
 
         const endpoint: string = import.meta.env.VITE_API_SERVER_URL + url
 
-        const response: AxiosResponseJsonType = await ajaxRequestWithBearerToken('get', endpoint)
+        const response: AxiosResponseJsonType = await callApi('get', endpoint)
 
         if (response.success) {
 

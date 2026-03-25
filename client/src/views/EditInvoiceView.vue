@@ -20,7 +20,7 @@ const paid: Ref<number> = ref(0)
 
 const { apiResponse, handlerFetch } = useFetch()
 
-const { pending, errors, handlerOnSubmit } = useForm("Invoices", false, true, invoiceSchema)
+const { pending, errors, handlerOnSubmit } = useForm("Invoices", false, invoiceSchema)
 
 onMounted(async () => {
 

@@ -6,7 +6,7 @@ import LabelComponent from '@/components/form/LabelComponent.vue';
 import { useForm } from '@/lib/form';
 import { loginSchema } from '@/lib/zod/schemas/login.schema';
 
-const { pending, errors, handlerOnSubmit } = useForm("Dashboard", true, false, loginSchema)
+const { pending, errors, handlerOnSubmit } = useForm("Dashboard", true, loginSchema)
 
 </script>
 

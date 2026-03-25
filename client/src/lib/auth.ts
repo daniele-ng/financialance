@@ -15,7 +15,25 @@ export class Auth {
      */
     static isAuthenticated(): boolean {
 
-        return typeof getCookie("access_token") !== "undefined"
+        return typeof getCookie("is_logged_in") !== "undefined"
+
+    }
+
+    /**
+     * Set is_logged_in cookie
+     */
+    static login(): void {
+
+        setCookie("is_logged_in", "1", import.meta.env.VITE_COOKIE_TOKEN_DURATION)
+
+    }
+
+    /**
+     * Delete is_logged_in cookie
+     */
+    static logout(): void {
+
+        deleteCookie("is_logged_in")
 
     }
 

@@ -2,8 +2,7 @@
  * Provides methods to manage ajax requests with the Axios package
  */
 
-import axios, { AxiosError, type AxiosResponse } from "axios";
-import { Auth } from "./auth";
+import axios, { AxiosError, type AxiosInstance, type AxiosResponse } from "axios";
 
 // Define axios response type
 export type AxiosResponseJsonType = {
@@ -21,14 +20,11 @@ export type AxiosResponseJsonType = {
     errors?: { [key: string]: string[] | string }
 }
 
-// Define token data object
-type TokenData = { access_token: string, refresh_token: string }
-
-// Define response body token data
-type TokenResponseBody = { data: TokenData }
-
-// Define common headers
-const headers = { "Content-Type": "application/json", "Accept": "application/json" }
+// Axios instance
+const axiosApi: AxiosInstance = axios.create({
+    headers: { "Content-Type": "application/json", 'X-Requested-With': 'XMLHttpRequest' },
+    withCredentials: true,
+})
 
 /**
  * Response errors object
@@ -82,17 +78,15 @@ const successResponse = (result: AxiosResponse<any, any>): AxiosResponseJsonType
  * @param method HTTP method
  * @param endpoint api endpoint
  * @param formData form data
- * @param credentials use bearer token
  * @returns Promise<AxiosResponseJsonType>
  */
-export const ajaxRequest = async (method: string, endpoint: string, formData?: FormData, credentials: boolean = false): Promise<AxiosResponseJsonType> => {
+const ajaxRequest = async (method: string, endpoint: string, formData?: FormData): Promise<AxiosResponseJsonType> => {
 
     try {
 
-        const response = await axios({
+        const response = await axiosApi({
             method: method,
             url: endpoint,
-            headers: credentials ? { ...headers , "Authorization": "Bearer " + Auth.getToken('access_token')} : headers,
             data: formData
         })
 
@@ -107,7 +101,7 @@ export const ajaxRequest = async (method: string, endpoint: string, formData?: F
 }
 
 /**
- * Perform an ajax request with bearer token.
+ * Call api performing a request with axios
  * 
  * If the access token is not valid, try recovering a new one by calling the endpoint /api/tokens,
  * then send the request again.
@@ -117,45 +111,16 @@ export const ajaxRequest = async (method: string, endpoint: string, formData?: F
  * @param formData form data
  * @returns Promise<AxiosResponseJsonType>
  */
-export const ajaxRequestWithBearerToken = async (method: string, endpoint: string, formData?: FormData): Promise<AxiosResponseJsonType> => {
+export const callApi = async (method: string, endpoint: string, formData?: FormData): Promise<AxiosResponseJsonType> => {
 
-    const response: AxiosResponseJsonType = await ajaxRequest(method, endpoint, formData, true)    
+    const response: AxiosResponseJsonType = await ajaxRequest(method, endpoint, formData)    
 
     if (response.status != 403 ) return response
 
-    const tokenResponse = await ajaxRequestTokens()
+    const tokenResponse = await ajaxRequest("GET", import.meta.env.VITE_API_SERVER_URL + "/api/tokens")
 
     if (tokenResponse.status != 200 || !tokenResponse.success) return tokenResponse
 
-    const tokens = ( tokenResponse.body as TokenResponseBody ).data
-
-    Auth.storeTokens([{ access_token: tokens.access_token }, { refresh_token: tokens.refresh_token }])
-
-    return await ajaxRequest(method, endpoint, formData, true)
-
-}
-
-/**
- * Call the endpoint /api/tokens in order to recover new access and refresh tokens
- * 
- * @returns Promise<AxiosResponseJsonType>
- */
-const ajaxRequestTokens = async (): Promise<AxiosResponseJsonType> => {
-
-    try {
-
-        const response = await axios({
-            method: "get",
-            url: import.meta.env.VITE_API_SERVER_URL + "/api/tokens",
-            headers: { ...headers, "Authorization": "Bearer " + Auth.getToken('refresh_token') }
-        })
-
-        return successResponse(response)
-
-    }
-    catch (err) {
-
-        return errorResponse(err as AxiosError)
-    }
+    return await ajaxRequest(method, endpoint, formData)
 
 }

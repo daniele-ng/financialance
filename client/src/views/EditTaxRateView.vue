@@ -15,7 +15,7 @@ const item: Ref<TaxRateType | undefined> = ref()
 
 const { apiResponse, handlerFetch } = useFetch()
 
-const { pending, errors, handlerOnSubmit } = useForm("Settings", false, true)
+const { pending, errors, handlerOnSubmit } = useForm("Settings", false)
 
 onMounted(async() => {
 

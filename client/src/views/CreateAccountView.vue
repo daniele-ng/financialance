@@ -7,7 +7,7 @@ import { useForm } from '@/lib/form';
 import { accountSchema } from '@/lib/zod/schemas/account.schema';
 
 
-const { pending, errors, handlerOnSubmit } = useForm("Login", false, false, accountSchema)
+const { pending, errors, handlerOnSubmit } = useForm("Login", false, accountSchema)
 
 </script>
 

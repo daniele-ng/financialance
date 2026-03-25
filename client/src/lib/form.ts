@@ -2,13 +2,13 @@
  * Composable to deal with form data submitting
  */
 import { ref, type Ref } from 'vue'
-import { ajaxRequest, ajaxRequestWithBearerToken, type AxiosResponseJsonType } from './axios-wrapper'
+import { callApi, type AxiosResponseJsonType } from './axios-wrapper'
 import router from '@/router'
 import { Auth } from './auth'
 import { ZodValidation } from './zod/validation'
 import type { ZodObject } from 'zod'
 
-export function useForm(redirectTo: string, isLogin: boolean = false, credentials: boolean = false, zodSchema?: ZodObject) {
+export function useForm(redirectTo: string, isLogin: boolean = false, zodSchema?: ZodObject) {
 
     const pending: Ref<boolean> = ref(false)
 
@@ -42,7 +42,7 @@ export function useForm(redirectTo: string, isLogin: boolean = false, credential
 
             pending.value = true
 
-            const response: AxiosResponseJsonType = credentials ? await ajaxRequestWithBearerToken(method, endpoint, formData) : await ajaxRequest(method, endpoint, formData)
+            const response: AxiosResponseJsonType = await callApi(method, endpoint, formData)
 
             if (response.success) {
 
@@ -54,10 +54,7 @@ export function useForm(redirectTo: string, isLogin: boolean = false, credential
 
                     if (isLogin) {
 
-                        Auth.storeTokens([
-                            { access_token: response.body?.data.access_token },
-                            { refresh_token: response.body?.data.refresh_token }
-                        ])
+                        Auth.login()
 
                     }
 

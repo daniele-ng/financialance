@@ -8,7 +8,7 @@ import { useForm } from '@/lib/form';
 import { costSchema } from '@/lib/zod/schemas/cost.schema';
 
 
-const { pending, errors, handlerOnSubmit } = useForm("Costs", false, true, costSchema)
+const { pending, errors, handlerOnSubmit } = useForm("Costs", false, costSchema)
 
 </script>
 
